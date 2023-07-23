@@ -1,6 +1,6 @@
 import pandas as pd
 
-def convertir_excel_a_csv(ruta_excel, ruta_csv):
+def Convertir_excel_a_csv(ruta_excel, ruta_csv):
     try:
         # Leer el archivo Excel en un DataFrame
         df = pd.read_excel(ruta_excel)

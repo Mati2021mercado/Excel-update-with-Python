@@ -1,35 +1,24 @@
-import csv
-from excel_a_csv import convertir_excel_a_csv
 import pandas as pd
+from backup import Segurity_copy
+# from clean import Clean_data
+import csv
 
-#EXCEL
-excel_new_price = 'excel\\excel_nuevos_precios.xlsx'
-excel_productos = 'excel\\excel_productos.xlsx'
+def reemplazar_valores(datos_destino, excel_productos, arch_destino, arch_origen):
 
-#CSV
-csv_new_price = 'nuevos_precios.csv'
-mis_productos = 'mis_productos.csv'
-
-
-
-datos_destino = {}
-
-# Leer los datos del archivo destino en un diccionario
-
-def reemplazar_valores(arch_destino, arch_origen):
+    #FUNCION PARA CREAR COPIA DE SEGURIDAD y LE PASO EL NOMBRE QUE QUIERO QUE LA COPIA TENGA
+    Segurity_copy(arch_destino, "copia_de_seguridad_EXCEL_pruductos")
+    Segurity_copy(arch_origen, "copia_de_seguridad_EXCEL_nuevos_precios")
     
-    #CONVIERTO LOS EXCEL EN ARCHIVOS CSV QUE PUEDO MANIPULAR
-    convertir_excel_a_csv(excel_new_price, csv_new_price)
-    
-    convertir_excel_a_csv(excel_productos, mis_productos)
     # Abrir los archivos CSV en modo lectura y escritura
     with open(arch_destino, 'r') as f_destino:
+        
         lector_destino = csv.DictReader(f_destino)
         for fila in lector_destino:
             datos_destino[fila['Producto']] = fila['Precio']
-
-    # Leer los datos del archivo origen y actualizar el diccionario si el producto coincide
+    
+     # Leer los datos del archivo origen y actualizar el diccionario si el producto coincide
     with open(arch_origen, 'r') as f_origen:
+        
         lector_origen = csv.DictReader(f_origen)
         for fila in lector_origen:
             producto = fila['Producto']
@@ -46,12 +35,7 @@ def reemplazar_valores(arch_destino, arch_origen):
             escritor_destino.writerow({'Producto': producto, 'Precio': precio})  # Cambia los valores de las columnas según tu estructura
 
 
-    df_csv_productos = pd.read_csv(mis_productos)
+    df_csv_productos = pd.read_csv(arch_destino)
 
         # Guardar el DataFrame en un archivo Excel
     df_csv_productos.to_excel(excel_productos, index=False)
-
-
-
-reemplazar_valores("mis_productos.csv", "nuevos_precios.csv")
-
