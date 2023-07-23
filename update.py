@@ -1,6 +1,6 @@
 import pandas as pd
 from backup import Segurity_copy
-# from clean import Clean_data
+from clean import Clean_data
 import csv
 
 def reemplazar_valores(datos_destino, excel_productos, arch_destino, arch_origen):
@@ -15,10 +15,14 @@ def reemplazar_valores(datos_destino, excel_productos, arch_destino, arch_origen
         lector_destino = csv.DictReader(f_destino)
         for fila in lector_destino:
             datos_destino[fila['Producto']] = fila['Precio']
+            
+    #LIMPIO LOS DATOS Y CREO "new_data_cleaned.csv"
+    Clean_data(arch_origen)
     
      # Leer los datos del archivo origen y actualizar el diccionario si el producto coincide
-    with open(arch_origen, 'r') as f_origen:
-        
+    
+    with open("new_data_cleaned.csv", 'r') as f_origen:
+    
         lector_origen = csv.DictReader(f_origen)
         for fila in lector_origen:
             producto = fila['Producto']
